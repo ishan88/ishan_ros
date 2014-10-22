@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="rqt_mypkg" name="testNode" type="testNode.py" output="screen">
+	</node>
+</launch>
