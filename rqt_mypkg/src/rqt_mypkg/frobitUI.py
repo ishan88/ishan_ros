@@ -17,13 +17,16 @@ class UIPlugin(Plugin):
         super(UIPlugin, self).__init__(context)
         self.testDataTopic = rospy.get_param("~testData","/fmTest/testData")
         rospy.Subscriber(self.testDataTopic,String,self.on_testData)
+#         self.frobitUI_data = rospy.get_param("~frobitUIData",'/frobitUI/pub')
+#         self.pub = rospy.Publisher(self.frobitUI_data,String)
         self.setObjectName('MyPlugin')  
-    
+        
         self.threads = []
         name="RQT Plugin Thread"
         t = WorkerThread(name, self,context)
         t.start()
         self.threads.append(t)
+#        
       
     def on_testData(self,msg):
         rospy.loginfo("Message received is "+msg.data)
@@ -39,6 +42,8 @@ class UIPlugin(Plugin):
 class WorkerThread(QtCore.QThread):
     def __init__(self, name, receiver,context):
         rospy.loginfo("Worker Thread init() method "+name)
+        self.frobitUI_data = rospy.get_param("~frobitUIData",'/frobitUI/pub')
+        self.pub = rospy.Publisher(self.frobitUI_data,String)
         QtCore.QThread.__init__(self)
         self.name = name
         self.context = context
@@ -87,8 +92,11 @@ class WorkerThread(QtCore.QThread):
         
     
     def guiWork(self):
-        print("Gui working")
-        PackML()# use smach to implement the state pattern
+        print("Old Version")
+        while not rospy.is_shutdown():
+            self.pub.publish("RSD")        
+            rospy.sleep(10)
+            PackML()# use smach to implement the state pattern
        
         
     

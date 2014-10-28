@@ -1,3 +1,0 @@
-import rospy
-
-rospy.l
